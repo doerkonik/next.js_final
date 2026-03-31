@@ -2,3 +2,4 @@ DATABASE_URL="postgresql://postgres:Test%40123@localhost:5432/dtech?schema=publi
 NEXTAUTH_SECRET="your-super-secret-jwt-key-here-change-this-in-production"
 NEXTAUTH_URL="http://localhost:3000"
 NEXT_PUBLIC_EXTERNAL_API_URL=http://localhost/my.site
+NEXT_PUBLIC_API_URL=http://localhost:3000/api

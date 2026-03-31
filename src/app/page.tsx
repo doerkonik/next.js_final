@@ -1,9 +1,9 @@
-import { Container, Section, SectionHeader, GlassCard, PricingCard, GlassButton } from '@/components/UI'
+import { Container, GlassCard, PricingCard, Section, SectionHeader } from '@/components/UI'
 import Link from 'next/link'
 
 export default function HomePage() {
   return (
-    <div className="pt-16">
+    <div className="">
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         {/* Background orbs */}
@@ -11,13 +11,9 @@ export default function HomePage() {
         <div className="absolute bottom-20 right-1/4 w-64 h-64 bg-teal-300/15 rounded-full blur-3xl animate-float animation-delay-400" />
         <div className="absolute top-40 right-1/3 w-48 h-48 bg-emerald-300/10 rounded-full blur-2xl animate-float animation-delay-200" />
 
-        <Container className="relative z-10 py-24">
+        <Container >
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 text-sm font-semibold text-primary border border-primary/30 mb-6">
-                <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                Host Any App. Any Stack. Instantly.
-              </div>
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white mb-6 leading-tight">
                 Premium Cloud{' '}
                 <span className="text-gradient block">Hosting for</span>
@@ -111,7 +107,7 @@ export default function HomePage() {
       <Section className="bg-gradient-to-b from-transparent via-primary/5 to-transparent">
         <Container>
           <SectionHeader title="Hosting Plans" highlight="Built for Speed" subtitle="Transparent pricing with everything you need." />
-          <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid sm:grid-cols-3 gap-6 mx-auto">
             <PricingCard
               name="Starter"
               price="700"

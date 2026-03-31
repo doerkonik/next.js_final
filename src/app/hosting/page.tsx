@@ -51,7 +51,10 @@ export default function HostingPage() {
 
       <Container>
         <div className="text-center mb-16">
-
+          <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 text-xs font-bold text-primary border border-primary/30 mb-6 uppercase tracking-wider">
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            Live Hosting Plans
+          </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">
             Simple, Transparent{' '}
             <span className="text-gradient">Hosting Plans</span>
