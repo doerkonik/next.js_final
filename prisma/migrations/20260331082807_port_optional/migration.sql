@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "VPSPlan" ALTER COLUMN "port" DROP NOT NULL;

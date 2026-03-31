@@ -1,0 +1,39 @@
+import axios from 'axios'
+
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// Add request interceptor to include auth token
+api.interceptors.request.use(
+  (config) => {
+    // You can add auth token here if needed
+    // const token = localStorage.getItem('token')
+    // if (token) {
+    //   config.headers.Authorization = `Bearer ${token}`
+    // }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
+// Add response interceptor for error handling
+api.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    if (error.response?.status === 401) {
+      // Handle unauthorized access
+      console.error('Unauthorized access')
+    }
+    return Promise.reject(error)
+  }
+)
+
+export default api

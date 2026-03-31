@@ -1,0 +1,16 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/domains/[id]/route": "app/api/domains/[id]/route.js",
+  "/api/domains/route": "app/api/domains/route.js",
+  "/api/hosting/[id]/route": "app/api/hosting/[id]/route.js",
+  "/api/hosting/route": "app/api/hosting/route.js",
+  "/api/vps/route": "app/api/vps/route.js",
+  "/api/vps/[id]/route": "app/api/vps/[id]/route.js",
+  "/domain/page": "app/domain/page.js",
+  "/hosting/page": "app/hosting/page.js",
+  "/page": "app/page.js",
+  "/signin/page": "app/signin/page.js",
+  "/vps/page": "app/vps/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
+}
