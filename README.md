@@ -70,7 +70,7 @@ NEXT_PUBLIC_EXTERNAL_API_URL="https://your-api-url.com/api/v1"
 npx prisma generate
 
 # Run database migrations
-npx prisma migrate dev
+npx prisma migrate deploy
 
 # Seed the database with initial data
 npm run db:seed
