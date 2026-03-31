@@ -15,6 +15,10 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-8 xl:gap-12 items-center">
             {/* Left column */}
             <div className="text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 text-xs font-bold text-primary border border-primary/30 mb-6 uppercase tracking-wider">
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse flex-shrink-0" />
+                Now Live: dTech Hosting
+              </div>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white mb-4 sm:mb-6 leading-tight">
                 Premium Cloud{' '}
                 <span className="text-gradient block">Hosting for</span>
