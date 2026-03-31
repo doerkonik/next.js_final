@@ -19,7 +19,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close user dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
@@ -30,6 +29,15 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
+  // Close mobile menu on resize to desktop
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 768) setMenuOpen(false)
+    }
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
   const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Domain', href: '/domain' },
@@ -38,13 +46,15 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'glass shadow-lg shadow-black/5 dark:shadow-black/20' : 'bg-transparent'
-      }`}>
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'glass shadow-lg shadow-black/5 dark:shadow-black/20' : 'bg-transparent'
+        }`}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
             <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center glow-primary">
               <span className="text-white font-black text-sm">d</span>
             </div>
@@ -69,24 +79,32 @@ export default function Navbar() {
             <ThemeToggle theme={theme} toggle={toggle} />
 
             {status === 'loading' ? (
-              <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
+              <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
             ) : session ? (
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center gap-2 px-3 py-2 rounded-xl glass text-slate-600 dark:text-slate-300 hover:text-primary transition-all"
                 >
-                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold">
-                    {session.user.name?.[0]?.toUpperCase() || session.user.email?.[0]?.toUpperCase()}
+                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                    {session.user.name?.[0]?.toUpperCase() ||
+                      session.user.email?.[0]?.toUpperCase()}
                   </div>
-                  <span className="text-sm font-medium">{session.user.name || 'User'}</span>
-                  <svg className={`w-4 h-4 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span className="text-sm font-medium max-w-[120px] truncate">
+                    {session.user.name || 'User'}
+                  </span>
+                  <svg
+                    className={`w-4 h-4 flex-shrink-0 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 glass rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2">
+                  <div className="absolute right-0 top-full mt-2 w-48 glass rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50">
                     {session.user.role === 'admin' && (
                       <Link
                         href="/admin"
@@ -126,12 +144,13 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile hamburger */}
+          {/* Mobile: theme toggle + hamburger */}
           <div className="flex md:hidden items-center gap-2">
             <ThemeToggle theme={theme} toggle={toggle} />
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="p-2 rounded-xl glass text-slate-600 dark:text-slate-300"
+              aria-label="Toggle menu"
             >
               {menuOpen ? (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,7 +167,7 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden glass-card rounded-2xl mb-4 p-4 space-y-2 animate-in slide-in-from-top-2">
+          <div className="md:hidden glass-card rounded-2xl mb-4 p-4 space-y-1 animate-in slide-in-from-top-2">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
@@ -159,17 +178,58 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <div className="pt-2 border-t border-white/20 dark:border-white/5">
 
-              <div className="grid grid-cols-2 gap-2">
-                <Link href="/signin" onClick={() => setMenuOpen(false)} className="text-center px-4 py-3 rounded-xl text-sm font-semibold border border-primary/30 text-primary hover:bg-primary/10 transition-all">
-                  Login
-                </Link>
-                <Link href="/signup" onClick={() => setMenuOpen(false)} className="text-center px-4 py-3 rounded-xl text-sm font-bold bg-primary text-white hover:bg-primary-500 transition-all">
-                  Register
-                </Link>
-              </div>
-
+            <div className="pt-3 mt-2 border-t border-white/20 dark:border-white/5">
+              {status === 'loading' ? (
+                <div className="h-10 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
+              ) : session ? (
+                <div className="space-y-1">
+                  <div className="flex items-center gap-3 px-4 py-2">
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                      {session.user.name?.[0]?.toUpperCase() ||
+                        session.user.email?.[0]?.toUpperCase()}
+                    </div>
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">
+                      {session.user.name || session.user.email}
+                    </span>
+                  </div>
+                  {session.user.role === 'admin' && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/10 transition-all"
+                    >
+                      Admin Dashboard
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => {
+                      signOut()
+                      setMenuOpen(false)
+                    }}
+                    className="w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/10 transition-all"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    href="/signin"
+                    onClick={() => setMenuOpen(false)}
+                    className="text-center px-4 py-3 rounded-xl text-sm font-semibold border border-primary/30 text-primary hover:bg-primary/10 transition-all"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/signup"
+                    onClick={() => setMenuOpen(false)}
+                    className="text-center px-4 py-3 rounded-xl text-sm font-bold bg-primary text-white hover:bg-primary-500 transition-all"
+                  >
+                    Register
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -187,11 +247,21 @@ function ThemeToggle({ theme, toggle }: { theme: string; toggle: () => void }) {
     >
       {theme === 'dark' ? (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+          />
         </svg>
       ) : (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+          />
         </svg>
       )}
     </button>

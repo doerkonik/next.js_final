@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 // GlassCard
@@ -36,18 +37,22 @@ export function GlassButton({
   href?: string
   type?: 'button' | 'submit' | 'reset'
 }) {
-  const base = 'inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 cursor-pointer'
+  const base =
+    'inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 cursor-pointer'
   const variants = {
-    primary: 'bg-primary text-white glow-primary hover:bg-primary-500 hover:scale-105 active:scale-95',
-    secondary: 'glass border border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/60',
-    ghost: 'text-slate-600 dark:text-slate-300 hover:bg-white/20 dark:hover:bg-white/5 hover:text-primary',
+    primary:
+      'bg-primary text-white glow-primary hover:bg-primary-500 hover:scale-105 active:scale-95',
+    secondary:
+      'glass border border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/60',
+    ghost:
+      'text-slate-600 dark:text-slate-300 hover:bg-white/20 dark:hover:bg-white/5 hover:text-primary',
   }
 
   if (href) {
     return (
-      <a href={href} className={`${base} ${variants[variant]} ${className}`}>
+      <Link href={href} className={`${base} ${variants[variant]} ${className}`}>
         {children}
-      </a>
+      </Link>
     )
   }
 
@@ -58,34 +63,51 @@ export function GlassButton({
   )
 }
 
-// Container
-export function Container({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+// Container — max-w added so content never stretches full-viewport on wide screens
+export function Container({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
   return (
-    <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${className}`}>
+    <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>
       {children}
     </div>
   )
 }
 
-// Section
-export function Section({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return (
-    <section className={`py-20 ${className}`}>
-      {children}
-    </section>
-  )
+// Section — horizontal padding added so it works when used outside Container
+export function Section({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return <section className={`py-16 sm:py-20 ${className}`}>{children}</section>
 }
 
 // SectionHeader
-export function SectionHeader({ title, highlight, subtitle }: { title: string; highlight?: string; subtitle?: string }) {
+export function SectionHeader({
+  title,
+  highlight,
+  subtitle,
+}: {
+  title: string
+  highlight?: string
+  subtitle?: string
+}) {
   return (
-    <div className="text-center mb-16">
-      <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 dark:text-white mb-4">
-        {title}{' '}
-        {highlight && <span className="text-gradient">{highlight}</span>}
+    <div className="text-center mb-12 sm:mb-16">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-800 dark:text-white mb-4">
+        {title} {highlight && <span className="text-gradient">{highlight}</span>}
       </h2>
       {subtitle && (
-        <p className="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">{subtitle}</p>
+        <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto px-4">
+          {subtitle}
+        </p>
       )}
     </div>
   )
@@ -114,23 +136,28 @@ export function PricingCard({
   return (
     <div
       className={`relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-2 ${popular
-        ? 'bg-primary text-white glow-primary shadow-xl shadow-primary/30'
-        : 'glass-card border-glow hover:shadow-xl hover:shadow-primary/10'
+          ? 'bg-primary text-white glow-primary shadow-xl shadow-primary/30'
+          : 'glass-card border-glow hover:shadow-xl hover:shadow-primary/10'
         }`}
     >
       {popular && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-primary text-xs font-black px-4 py-1 rounded-full shadow-lg">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-primary text-xs font-black px-4 py-1 rounded-full shadow-lg whitespace-nowrap">
           MOST POPULAR
         </div>
       )}
       {badge && !popular && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-black px-4 py-1 rounded-full shadow-lg">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-black px-4 py-1 rounded-full shadow-lg whitespace-nowrap">
           {badge}
         </div>
       )}
-      <div className={`text-sm font-bold mb-2 ${popular ? 'text-white/80' : 'text-primary'}`}>{name}</div>
-      <div className="flex items-baseline gap-1 mb-6">
-        <span className={`text-4xl font-extrabold ${popular ? 'text-white' : 'text-slate-800 dark:text-white'}`}>
+      <div className={`text-sm font-bold mb-2 ${popular ? 'text-white/80' : 'text-primary'}`}>
+        {name}
+      </div>
+      <div className="flex items-baseline gap-1 mb-6 flex-wrap">
+        <span
+          className={`text-3xl sm:text-4xl font-extrabold ${popular ? 'text-white' : 'text-slate-800 dark:text-white'
+            }`}
+        >
           ৳{price}
         </span>
         <span className={`text-sm ${popular ? 'text-white/70' : 'text-slate-400'}`}>{period}</span>
@@ -138,18 +165,27 @@ export function PricingCard({
       <ul className="space-y-3 mb-6">
         {features.map((f, i) => (
           <li key={i} className="flex items-start gap-2 text-sm">
-            <svg className={`w-4 h-4 mt-0.5 flex-shrink-0 ${popular ? 'text-white' : 'text-primary'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+            <svg
+              className={`w-4 h-4 mt-0.5 flex-shrink-0 ${popular ? 'text-white' : 'text-primary'}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M5 13l4 4L19 7"
+              />
             </svg>
-            <span className={popular ? 'text-white/90' : 'text-slate-600 dark:text-slate-300'}>{f}</span>
+            <span className={popular ? 'text-white/90' : 'text-slate-600 dark:text-slate-300'}>
+              {f}
+            </span>
           </li>
         ))}
       </ul>
       {popular ? (
-        <GlassButton
-          href={href}
-          className="w-full bg-white hover:bg-white/90 !text-[#0ec7b7]"
-        >
+        <GlassButton href={href} className="w-full bg-white hover:bg-white/90 !text-[#0ec7b7]">
           {cta}
         </GlassButton>
       ) : (
@@ -162,7 +198,15 @@ export function PricingCard({
 }
 
 // AuthCard
-export function AuthCard({ children, title, subtitle }: { children: React.ReactNode; title: string; subtitle?: string }) {
+export function AuthCard({
+  children,
+  title,
+  subtitle,
+}: {
+  children: React.ReactNode
+  title: string
+  subtitle?: string
+}) {
   return (
     <div className="min-h-screen flex items-center justify-center py-24 px-4">
       <div className="w-full max-w-md">
@@ -174,11 +218,11 @@ export function AuthCard({ children, title, subtitle }: { children: React.ReactN
             <span className="text-2xl font-extrabold text-gradient">dTech</span>
           </div>
           <h1 className="text-2xl font-extrabold text-slate-800 dark:text-white mb-2">{title}</h1>
-          {subtitle && <p className="text-slate-500 dark:text-slate-400 text-sm">{subtitle}</p>}
+          {subtitle && (
+            <p className="text-slate-500 dark:text-slate-400 text-sm">{subtitle}</p>
+          )}
         </div>
-        <div className="glass-card rounded-3xl p-8 border-glow">
-          {children}
-        </div>
+        <div className="glass-card rounded-3xl p-6 sm:p-8 border-glow">{children}</div>
       </div>
     </div>
   )
@@ -190,7 +234,7 @@ export function FormInput({
   type = 'text',
   placeholder,
   id,
-  ...props // Use the spread operator to catch value, onChange, required, etc.
+  ...props
 }: {
   label: string
   type?: string
@@ -200,7 +244,10 @@ export function FormInput({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+      <label
+        htmlFor={id}
+        className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
+      >
         {label}
       </label>
       <input
